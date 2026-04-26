@@ -162,7 +162,9 @@ def aggregate_and_push():
     df_24h = get_agg_df(date_24h)
     df_7d = get_agg_df(date_7d)
     df_1m = get_agg_df(date_1m)
-
+    df_24h.to_csv("sentiment_24h.csv", index=False)
+    df_7d.to_csv("sentiment_7d.csv", index=False)
+    df_1m.to_csv("sentiment_1m.csv", index=False)
     # Push to Google Sheets
     push_to_sheet(df_24h, "24H Sentiment")
     push_to_sheet(df_7d, "7D Sentiment")
