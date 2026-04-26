@@ -154,14 +154,14 @@ def aggregate_and_push():
         cut_off_date = get_relative_date(date_filter)
 
         df = dbm.get_articles(
-            has_sentiment=True,
-            index=universe,          # ✅ MUST match app
+            has_sentiment=True,       # ✅ MUST match app
             after_date=cut_off_date  # ✅ MUST match app
         )
 
         if df.empty:
             return df
-
+        nifty50 = dbm.get_index_constituents("nifty_50")["ticker"].tolist()
+        df = df[df["ticker"].isin(nifty50)]
         agg_df = (
             df.groupby("ticker")["compound_sentiment"]
             .mean()
