@@ -3,10 +3,11 @@ from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime
 import os
 import json
-
-
 def push_to_sheet(df, sheet_name):
-
+    import gspread
+    from oauth2client.service_account import ServiceAccountCredentials
+    from datetime import datetime
+    import os, json
 
     scope = [
         "https://spreadsheets.google.com/feeds",
@@ -25,16 +26,15 @@ def push_to_sheet(df, sheet_name):
     df = df.copy()
     df["ticker"] = df["ticker"].astype(str)
 
-    # 🔥 Check if sheet already has data
     existing_data = worksheet.get_all_values()
 
     rows = []
 
-    # ✅ Add header ONLY if sheet is empty
+    # ✅ header only once
     if not existing_data:
         rows.append(["Stock Name", "Sentiment Score", "", "Date & Time"])
 
-    # ✅ Add actual data
+    # ✅ data
     for _, row in df.iterrows():
         rows.append([
             str(row["ticker"]),
@@ -43,5 +43,6 @@ def push_to_sheet(df, sheet_name):
             now
         ])
 
-    # ✅ Append without overwriting
-    worksheet.append_rows(rows, value_input_option="RAW")
+    # 🔥 FIX: force append from column A
+    start_row = len(existing_data) + 1
+    worksheet.update(f"A{start_row}", rows)
