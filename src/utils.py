@@ -13,7 +13,7 @@ from tqdm import tqdm
 
 from config import BATCH_SIZE, DB_UTILS, HEADER, SENTIMENT_MODEL_NAME
 from database import DatabaseManager
-
+from datetime import datetime, timedelta
 
 def get_webpage_content(
     url: str,
@@ -200,7 +200,18 @@ def parse_date(
     formatted_date: str = datetime_object.strftime(datetime_format)
     return formatted_date
 
+def get_relative_date(option: str) -> str:
+    now = datetime.now()
 
+    if option == "Past 24 Hours":
+        return (now - timedelta(days=1)).strftime('%Y-%m-%d')
+    elif option == "Past 7 Days":
+        return (now - timedelta(days=7)).strftime('%Y-%m-%d')
+    elif option == "Past 1 Month":
+        return (now - timedelta(days=30)).strftime('%Y-%m-%d')
+
+    # default fallback
+    return (now - timedelta(days=1)).strftime('%Y-%m-%d')
 def analyse_sentiment(headlines: list[str]) -> pd.DataFrame:
     """
     Perform Sentiment Analysis using finBERT model. Create a dataframe from the results.
