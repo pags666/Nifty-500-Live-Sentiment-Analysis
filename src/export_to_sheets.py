@@ -30,8 +30,7 @@ def push_to_sheet(df, sheet_name):
     # Ensure correct types (🔥 important fix)
     df = df.copy()
     df["ticker"] = df["ticker"].astype(str)
-    df["sentiment_score"] = df["sentiment_score"].astype(float)
-
+   
     # Prepare rows
     rows = [["Stock Name", "Sentiment Score", "", "Date & Time"]]
 
