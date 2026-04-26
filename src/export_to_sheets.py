@@ -33,7 +33,7 @@ def push_to_sheet(df, sheet_name):
             row["ticker"],             # Column A
             row["sentiment_score"],   # Column B
             "",                       # Column C
-            now                       # Column D
+            str(now)                       # Column D
         ])
 
     worksheet.update(rows)
