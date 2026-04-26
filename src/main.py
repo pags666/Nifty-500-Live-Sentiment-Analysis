@@ -146,18 +146,18 @@ def aggregate_and_push():
     date_24h = (now - timedelta(days=1)).strftime('%Y-%m-%d')
     date_7d = (now - timedelta(days=7)).strftime('%Y-%m-%d')
     date_1m = (now - timedelta(days=30)).strftime('%Y-%m-%d')
-
     def get_agg_df(date):
         df = dbm.get_articles(n=10000, has_sentiment=True, after_date=date)
-
         if df.empty:
             return df
-
-        return (
-            df.groupby("ticker")["sentiment_score"]
+        # ✅ use correct column + standardize name
+        agg_df = (
+            df.groupby("ticker")["sentiment"]   # 👈 FIX HERE
             .mean()
             .reset_index()
+            .rename(columns={"sentiment": "sentiment_score"})
         )
+        return agg_df
 
     df_24h = get_agg_df(date_24h)
     df_7d = get_agg_df(date_7d)
