@@ -27,6 +27,9 @@ jobs:
 
       - name: Install necessary libraries using uv
         run: make install
+      - name: Install Google Sheets libs
+        run: |
+          pip install gspread oauth2client
         
       - name: Execute main python file
         env:
