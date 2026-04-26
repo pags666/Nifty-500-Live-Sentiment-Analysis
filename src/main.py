@@ -138,7 +138,6 @@ def compute_and_update_sentiment(n: int = 200):
         f'Updated database with sentiment scores for {articles_df_with_sentiment.shape[0]} articles.'
     )
 
-
 def aggregate_and_push():
     dbm = DatabaseManager()
     now = datetime.now()
@@ -146,28 +145,38 @@ def aggregate_and_push():
     date_24h = (now - timedelta(days=1)).strftime('%Y-%m-%d')
     date_7d = (now - timedelta(days=7)).strftime('%Y-%m-%d')
     date_1m = (now - timedelta(days=30)).strftime('%Y-%m-%d')
+
     def get_agg_df(date):
         df = dbm.get_articles(n=10000, has_sentiment=True, after_date=date)
 
         if df.empty:
             return df
 
-    # 👉 take last column as sentiment (no guessing)
+        # take last column as sentiment
         sentiment_col = df.columns[-1]
 
-        agg_df = df.groupby("ticker")[sentiment_col].mean().reset_index()
-
-        agg_df = agg_df.rename(columns={sentiment_col: "sentiment_score"})
+        agg_df = (
+            df.groupby("ticker")[sentiment_col]
+            .mean()
+            .reset_index()
+            .rename(columns={sentiment_col: "sentiment_score"})
+        )
 
         return agg_df
 
     df_24h = get_agg_df(date_24h)
     df_7d = get_agg_df(date_7d)
     df_1m = get_agg_df(date_1m)
-    # Push to Google Sheets
-    push_to_sheet(df_24h, "24H_Data")
-    push_to_sheet(df_7d, "7D_Data")
-    push_to_sheet(df_1m, "1M_Data")
+
+    # ✅ push only if data exists
+    if not df_24h.empty:
+        push_to_sheet(df_24h, "24H_Data")
+
+    if not df_7d.empty:
+        push_to_sheet(df_7d, "7D_Data")
+
+    if not df_1m.empty:
+        push_to_sheet(df_1m, "1M_Data")
 
     print("✅ Sheets updated!")
 
