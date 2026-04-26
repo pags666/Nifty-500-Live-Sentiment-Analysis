@@ -22,7 +22,7 @@ def push_to_sheet(df, sheet_name):
     worksheet = sheet.worksheet(sheet_name)
 
     # Clear old data
-    worksheet.clear()
+  #  worksheet.clear()
 
     # Current time
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -32,7 +32,7 @@ def push_to_sheet(df, sheet_name):
     df["ticker"] = df["ticker"].astype(str)
    
     # Prepare rows
-    rows = [["Stock Name", "Sentiment Score", "", "Date & Time"]]
+   # rows = [["Stock Name", "Sentiment Score", "", "Date & Time"]]
 
     for _, row in df.iterrows():
         rows.append([
