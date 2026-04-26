@@ -149,27 +149,20 @@ def aggregate_and_push():
     date_7d = (now - timedelta(days=7)).strftime('%Y-%m-%d')
     date_1m = (now - timedelta(days=30)).strftime('%Y-%m-%d')
 
-    def get_agg_df(date_filter):
-        universe = "nifty_50"   # same as app selection
-        cut_off_date = get_relative_date(date_filter)
-
-        df = dbm.get_articles(
-            has_sentiment=True,       # ✅ MUST match app
-            after_date=cut_off_date  # ✅ MUST match app
-        )
+    def get_agg_df(date):
+        df = dbm.get_articles(n=10000, has_sentiment=True, after_date=date)
 
         if df.empty:
             return df
-        nifty50 = dbm.get_index_constituents("nifty_50")["ticker"].tolist()
-        df = df[df["ticker"].isin(nifty50)]
+
         agg_df = (
-            df.groupby("ticker")["compound_sentiment"]
+            df.groupby("ticker")["compound_sentiment"]   # ✅ MUST BE THIS
             .mean()
             .reset_index()
         )
-
+    
         agg_df = agg_df.rename(columns={"compound_sentiment": "sentiment_score"})
-
+    
         return agg_df
 
     df_24h = get_agg_df(date_24h)
