@@ -27,8 +27,10 @@ jobs:
 
       - name: Install necessary libraries using uv
         run: make install
-
+        
       - name: Execute main python file
+        env:
+          GOOGLE: ${{ secrets.GOOGLE }}
         run: make run
 
       - name: Execute python script to update sentiment page
