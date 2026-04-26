@@ -13,6 +13,9 @@ from tqdm import tqdm
 import utils as utils
 from database import DatabaseManager
 from news_fetcher import TickerNewsObject
+from datetime import datetime, timedelta
+from database import DatabaseManager
+from export_to_sheets import push_to_sheet
 
 # Remove the default logger to prevent duplicate log entries.
 logger.remove()
@@ -136,6 +139,37 @@ def compute_and_update_sentiment(n: int = 200):
     )
 
 
+def aggregate_and_push():
+    dbm = DatabaseManager()
+    now = datetime.now()
+
+    date_24h = (now - timedelta(days=1)).strftime('%Y-%m-%d')
+    date_7d = (now - timedelta(days=7)).strftime('%Y-%m-%d')
+    date_1m = (now - timedelta(days=30)).strftime('%Y-%m-%d')
+
+    def get_agg_df(date):
+        df = dbm.get_articles(n=10000, has_sentiment=True, after_date=date)
+
+        if df.empty:
+            return df
+
+        return (
+            df.groupby("ticker")["sentiment_score"]
+            .mean()
+            .reset_index()
+        )
+
+    df_24h = get_agg_df(date_24h)
+    df_7d = get_agg_df(date_7d)
+    df_1m = get_agg_df(date_1m)
+
+    # Push to Google Sheets
+    push_to_sheet(df_24h, "24H Sentiment")
+    push_to_sheet(df_7d, "7D Sentiment")
+    push_to_sheet(df_1m, "1M Sentiment")
+
+    print("✅ Sheets updated!")
+
 if __name__ == '__main__':
     # Example usage: Fetch data for Nifty 50.
     # Choose the universe: "nifty_50", "nifty_100", "nifty_200", "nifty_500"
@@ -144,3 +178,4 @@ if __name__ == '__main__':
     # Call the function to fetch news
     get_news(universe, multiprocess)
     compute_and_update_sentiment()
+    aggregate_and_push()  
