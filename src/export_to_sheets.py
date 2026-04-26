@@ -43,4 +43,4 @@ def push_to_sheet(df, sheet_name):
         ])
 
     # Update sheet
-    worksheet.update(rows)
+    worksheet.append_rows(rows)
