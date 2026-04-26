@@ -17,6 +17,9 @@ from datetime import datetime, timedelta
 from database import DatabaseManager
 from export_to_sheets import push_to_sheet
 
+from src.utils import get_relative_date
+from src.config import IndexType
+
 # Remove the default logger to prevent duplicate log entries.
 logger.remove()
 # Define the logging format.
@@ -146,27 +149,27 @@ def aggregate_and_push():
     date_7d = (now - timedelta(days=7)).strftime('%Y-%m-%d')
     date_1m = (now - timedelta(days=30)).strftime('%Y-%m-%d')
 
-    def get_agg_df(date):
-        df = dbm.get_articles(n=10000, has_sentiment=True, after_date=date)
+    def get_agg_df(date_filter):
+        universe = "nifty_50"   # same as app selection
+        cut_off_date = get_relative_date(date_filter)
+
+        df = dbm.get_articles(
+            has_sentiment=True,
+            index=universe,          # ✅ MUST match app
+            after_date=cut_off_date  # ✅ MUST match app
+        )
 
         if df.empty:
             return df
-
-    # ✅ pick only numeric columns
-        numeric_cols = df.select_dtypes(include=["float", "int"]).columns
-
-        if len(numeric_cols) == 0:
-            raise Exception(f"No numeric sentiment column found. Columns: {df.columns}")
-
-        sentiment_col = numeric_cols[0]   # take first numeric column
 
         agg_df = (
             df.groupby("ticker")["compound_sentiment"]
             .mean()
             .reset_index()
-            
         )
+
         agg_df = agg_df.rename(columns={"compound_sentiment": "sentiment_score"})
+
         return agg_df
 
     df_24h = get_agg_df(date_24h)
