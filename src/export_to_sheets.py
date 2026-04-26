@@ -32,7 +32,7 @@ def push_to_sheet(df, sheet_name):
     df["ticker"] = df["ticker"].astype(str)
    
     # Prepare rows
-   # rows = [["Stock Name", "Sentiment Score", "", "Date & Time"]]
+    rows = [["Stock Name", "Sentiment Score", "", "Date & Time"]]
 
     for _, row in df.iterrows():
         rows.append([
