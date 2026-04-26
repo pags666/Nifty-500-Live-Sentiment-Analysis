@@ -21,7 +21,10 @@ def push_to_sheet(df, sheet_name):
     sheet = client.open_by_key("1le7tQxVkznMvphgOB2T0tGyzb_ByeaOHJ4R9E5piY_A")
     worksheet = sheet.worksheet(sheet_name)
 
-    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    import pytz
+    ist = pytz.timezone("Asia/Kolkata")
+    now = datetime.now(ist).strftime("%Y-%m-%d %H:%M:%S")
+
 
     df = df.copy()
     df["ticker"] = df["ticker"].astype(str)
