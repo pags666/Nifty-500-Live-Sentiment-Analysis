@@ -18,7 +18,7 @@ from database import DatabaseManager
 from export_to_sheets import push_to_sheet
 
 from utils import get_relative_date
-from config import IndexType
+
 
 # Remove the default logger to prevent duplicate log entries.
 logger.remove()
