@@ -161,12 +161,12 @@ def aggregate_and_push():
         sentiment_col = numeric_cols[0]   # take first numeric column
 
         agg_df = (
-            df.groupby("ticker")[sentiment_col]
+            df.groupby("ticker")["compound_sentiment"]
             .mean()
             .reset_index()
-            .rename(columns={sentiment_col: "sentiment_score"})
+            
         )
-
+        agg_df = agg_df.rename(columns={"compound_sentiment": "sentiment_score"})
         return agg_df
 
     df_24h = get_agg_df(date_24h)
