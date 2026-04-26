@@ -150,25 +150,26 @@ def aggregate_and_push():
         df = dbm.get_articles(n=10000, has_sentiment=True, after_date=date)
         if df.empty:
             return df
-        # ✅ use correct column + standardize name
+
+    # 👇 CHANGE THIS COLUMN NAME BASED ON YOUR DATA
         agg_df = (
-            df.groupby("ticker")["sentiment"]   # 👈 FIX HERE
+            df.groupby("ticker")["compound"]   # <-- replace "compound" if needed
             .mean()
             .reset_index()
-            .rename(columns={"sentiment": "sentiment_score"})
         )
-        return agg_df
+
+    # standard name for sheet
+    agg_df = agg_df.rename(columns={"compound": "sentiment_score"})
+
+    return agg_df
 
     df_24h = get_agg_df(date_24h)
     df_7d = get_agg_df(date_7d)
     df_1m = get_agg_df(date_1m)
-    df_24h.to_csv("sentiment_24h.csv", index=False)
-    df_7d.to_csv("sentiment_7d.csv", index=False)
-    df_1m.to_csv("sentiment_1m.csv", index=False)
     # Push to Google Sheets
-    push_to_sheet(df_24h, "24H Sentiment")
-    push_to_sheet(df_7d, "7D Sentiment")
-    push_to_sheet(df_1m, "1M Sentiment")
+    push_to_sheet(df_24h, "24H_Data")
+    push_to_sheet(df_7d, "7D_Data")
+    push_to_sheet(df_1m, "1M_Data")
 
     print("✅ Sheets updated!")
 
