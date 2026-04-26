@@ -157,11 +157,9 @@ def aggregate_and_push():
             .mean()
             .reset_index()
         )
+        agg_df = agg_df.rename(columns={"compound": "sentiment_score"})
 
-    # standard name for sheet
-    agg_df = agg_df.rename(columns={"compound": "sentiment_score"})
-
-    return agg_df
+        return agg_df
 
     df_24h = get_agg_df(date_24h)
     df_7d = get_agg_df(date_7d)
