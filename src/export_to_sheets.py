@@ -25,15 +25,13 @@ def push_to_sheet(df, sheet_name):
     worksheet.clear()
 
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-    rows = [["Stock", "Sentiment", "", "Updated At"]]
-
+    rows = [["Stock Name", "Sentiment Value", "", "Updated Time"]]
     for _, row in df.iterrows():
         rows.append([
-            row["ticker"],
-            row["sentiment_score"],
-            "",
-            now
+            row["ticker"],            # A
+            row["sentiment_score"],   # B
+            "",                       # C (empty)
+            now                       # D
         ])
 
     worksheet.update(rows)
