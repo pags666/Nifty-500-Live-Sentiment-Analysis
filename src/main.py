@@ -148,16 +148,16 @@ def aggregate_and_push():
     date_1m = (now - timedelta(days=30)).strftime('%Y-%m-%d')
     def get_agg_df(date):
         df = dbm.get_articles(n=10000, has_sentiment=True, after_date=date)
+
         if df.empty:
             return df
 
-    # 👇 CHANGE THIS COLUMN NAME BASED ON YOUR DATA
-        agg_df = (
-            df.groupby("ticker")["compound"]   # <-- replace "compound" if needed
-            .mean()
-            .reset_index()
-        )
-        agg_df = agg_df.rename(columns={"compound": "sentiment_score"})
+    # 👉 take last column as sentiment (no guessing)
+        sentiment_col = df.columns[-1]
+
+        agg_df = df.groupby("ticker")[sentiment_col].mean().reset_index()
+
+        agg_df = agg_df.rename(columns={sentiment_col: "sentiment_score"})
 
         return agg_df
 
