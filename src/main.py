@@ -152,8 +152,13 @@ def aggregate_and_push():
         if df.empty:
             return df
 
-        # take last column as sentiment
-        sentiment_col = df.columns[-1]
+    # ✅ pick only numeric columns
+        numeric_cols = df.select_dtypes(include=["float", "int"]).columns
+
+        if len(numeric_cols) == 0:
+            raise Exception(f"No numeric sentiment column found. Columns: {df.columns}")
+
+        sentiment_col = numeric_cols[0]   # take first numeric column
 
         agg_df = (
             df.groupby("ticker")[sentiment_col]
