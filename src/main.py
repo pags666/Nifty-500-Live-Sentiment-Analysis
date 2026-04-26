@@ -146,6 +146,7 @@ def compute_and_update_sentiment(n: int = 200):
     )
 
 def aggregate_and_push():
+    dbm = DatabaseManager() 
     ist = pytz.timezone("Asia/Kolkata")
     now = datetime.now(ist)
 
