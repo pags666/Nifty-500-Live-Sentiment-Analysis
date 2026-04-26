@@ -146,8 +146,8 @@ def compute_and_update_sentiment(n: int = 200):
     )
 
 def aggregate_and_push():
-    dbm = DatabaseManager()
-    now = datetime.now()
+    ist = pytz.timezone("Asia/Kolkata")
+    now = datetime.now(ist)
 
     date_24h = (now - timedelta(days=1)).strftime('%Y-%m-%d')
     date_7d = (now - timedelta(days=7)).strftime('%Y-%m-%d')
