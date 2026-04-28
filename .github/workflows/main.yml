@@ -2,8 +2,8 @@ name: Get Sentiment and update GitHub page
 
 on:
   schedule:
-    - cron: "30 11 * * *" #runs at 11:30 utc (17:00 ist) everyday
-    - cron: "0 9 * * *"  
+    - cron: "30 8 * * *"   # runs at 08:30 UTC (2:00 PM IST)
+    - cron: "30 12 * * *"  # runs at 12:30 UTC (6:00 PM IST)
   workflow_dispatch: # allows manual triggering of the workflow
 
 jobs:
