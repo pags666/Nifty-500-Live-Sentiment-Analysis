@@ -112,24 +112,38 @@ class DatabaseManager:
             conn.execute(CREATE_TABLE['ticker_meta'])
 
     def insert_articles(
-        self, articles_df: pd.DataFrame, has_sentiment: bool = False
+        self,
+        articles_df: pd.DataFrame,
+        has_sentiment: bool = False,
     ) -> None:
         """
-        Insert articles into the database with conflict resolution to avoid duplicates.
-
-        Args:
-            articles_df: DataFrame with article data
-            has_sentiment: Whether the DataFrame includes sentiment columns
+        Insert articles into the database.
         """
+    
         logger.info(
-            f'Inserting {articles_df.shape[0]} articles {"with" if has_sentiment else "without"} sentiment into the database'
+            f'Inserting {articles_df.shape[0]} articles '
+            f'{"with" if has_sentiment else "without"} sentiment'
         )
+    
         with self.get_connection() as conn:
+    
+            conn.register(
+                "articles_df",
+                articles_df,
+            )
+    
             if has_sentiment:
-                conn.execute(INSERT_DATA['article_data_with_sentiment'])
+                conn.execute(
+                    INSERT_DATA["article_data_with_sentiment"]
+                )
             else:
-                conn.execute(INSERT_DATA['article_data_without_sentiment'])
-        logger.success(f'Inserted {articles_df.shape[0]} articles into the database')
+                conn.execute(
+                    INSERT_DATA["article_data_without_sentiment"]
+                )
+    
+        logger.success(
+            f'Inserted {articles_df.shape[0]} articles'
+        )
 
     def insert_ticker_metadata(
         self, ticker_meta: list[list[str | float | None]]
