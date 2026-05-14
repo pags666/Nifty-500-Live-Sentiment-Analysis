@@ -159,9 +159,14 @@ def build_articles_query(
     params = []
 
     # Apply sentiment filter
-    if not has_sentiment:
-        query_parts.append('AND compound_sentiment IS NULL')
-
+    if has_sentiment:
+        query_parts.append(
+            'AND compound_sentiment IS NOT NULL'
+        )
+    else:
+        query_parts.append(
+            'AND compound_sentiment IS NULL'
+        )
     # Apply date filter
     if after_date is not None:
         query_parts.append('AND date_posted >= ?')
