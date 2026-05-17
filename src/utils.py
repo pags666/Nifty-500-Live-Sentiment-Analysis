@@ -152,9 +152,15 @@ def parse_date(
         if len(parts) != 2 and len(parts) != 3:
             return ''
 
-        value: int = int(parts[0]) if parts[0] not in ['a', 'last'] else 1
-        unit: str = parts[1]
+        raw = parts[0]
 
+        if raw in ['a', 'last']:
+            value = 1
+        else:
+            numeric = ''.join(filter(str.isdigit, raw))
+            value = int(numeric) if numeric else 1
+        
+        unit = parts[1] if len(parts) > 1 else raw
         if unit.startswith('minute'):
             datetime_object = now - timedelta(minutes=value)
         elif unit.startswith('hour'):
@@ -164,6 +170,8 @@ def parse_date(
         elif unit.startswith('week'):
             datetime_object = now - timedelta(weeks=value)
         elif unit.startswith('month'):
+            datetime_object = now - relativedelta(months=value)
+        elif 'mo' in unit:
             datetime_object = now - relativedelta(months=value)
         elif unit.startswith('year'):
             datetime_object = now - relativedelta(years=value)
