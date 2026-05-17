@@ -48,4 +48,4 @@ def push_to_sheet(df, sheet_name):
 
     # 🔥 FIX: force append from column A
     start_row = len(existing_data) + 1
-    worksheet.update(f"A{start_row}", rows)
+    worksheet.update(rows, f"A{start_row}")
