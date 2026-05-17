@@ -1047,7 +1047,7 @@ wheels = [
 ]
 
 [[package]]
-name = "nifty-500-live-sentiment-analysis"
+name = "nifty-500-live-sentiment-analysis-dashboard"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
