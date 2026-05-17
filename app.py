@@ -9,7 +9,10 @@ if os.path.exists(html_file):
     with open(html_file, "r", encoding="utf-8") as f:
         html_content = f.read()
 
-    st.components.v1.html(html_content, height=3000, scrolling=True)
-
+    st.components.v1.html(
+        html_content,
+        height=3000,
+        scrolling=True,
+    )
 else:
     st.error("Dashboard HTML not found.")
