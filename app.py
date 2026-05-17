@@ -3,14 +3,21 @@ sys.path.append("src")
 
 import streamlit as st
 import pandas as pd
+import plotly.express as px
 from database import DatabaseManager
 
-st.set_page_config(
-    page_title="NIFTY Sentiment Dashboard",
-    layout="wide"
-)
+st.set_page_config(layout="wide")
 
-st.title("NIFTY 50 Stocks Sentiment Dashboard")
+# ---------------- TITLE ----------------
+
+st.title("NIFTY 50 Stocks Sentiment Analyzer")
+
+st.markdown(
+    """
+    This dashboard gives users an almost real-time comprehensive visual overview
+    on the sentiments of various NIFTY indices.
+    """
+)
 
 # ---------------- DATABASE ----------------
 
@@ -24,7 +31,7 @@ ticker_metadata = db_manager.get_ticker_metadata()
 st.sidebar.header("Filters")
 
 date_range = st.sidebar.selectbox(
-    "Select Time Range",
+    "Pick the Date Range",
     ["Past 24 Hours", "Past 7 Days", "Past 1 Month"]
 )
 
@@ -51,7 +58,7 @@ else:
         article_data["date_posted"] >= now - pd.Timedelta(days=30)
     ]
 
-# ---------------- AGGREGATE ----------------
+# ---------------- AGGREGATION ----------------
 
 ticker_scores = (
     filtered_articles[
@@ -68,6 +75,8 @@ ticker_scores = (
     .reset_index()
 )
 
+# ---------------- MERGE ----------------
+
 final_df = pd.merge(
     ticker_metadata,
     ticker_scores,
@@ -79,23 +88,62 @@ final_df = pd.merge(
 
 final_df.rename(
     columns={
+        "mCap": "Market Cap (Billion Rs)",
         "compound_sentiment": "Sentiment Score",
+        "neutral_sentiment": "Neutral",
         "positive_sentiment": "Positive",
         "negative_sentiment": "Negative",
-        "neutral_sentiment": "Neutral",
     },
     inplace=True,
 )
 
-# ---------------- DISPLAY ----------------
+# ---------------- TREEMAP ----------------
 
-st.subheader(f"Showing Data: {date_range}")
+fig = px.treemap(
+    final_df,
+    path=[px.Constant("NIFTY 50"), "sector", "industry", "ticker"],
+    values="Market Cap (Billion Rs)",
+    color="Sentiment Score",
+    hover_data=[
+        "companyName",
+        "Negative",
+        "Neutral",
+        "Positive",
+        "Sentiment Score",
+    ],
+    color_continuous_scale=["#FF0000", "#000000", "#00FF00"],
+    color_continuous_midpoint=0,
+)
 
-st.dataframe(final_df)
+fig.data[0].customdata = final_df[
+    [
+        "companyName",
+        "Negative",
+        "Neutral",
+        "Positive",
+        "Sentiment Score",
+    ]
+]
 
-# ---------------- NEWS VIEW ----------------
+fig.data[0].texttemplate = "%{label}<br>%{customdata[4]}"
 
-st.subheader("Stock News")
+fig.update_traces(textposition="middle center")
+
+fig.update_layout(
+    margin=dict(t=30, l=10, r=10, b=10),
+    font_size=20,
+    paper_bgcolor="#0E1117",
+    plot_bgcolor="#0E1117",
+    font_color="white",
+)
+
+# ---------------- SHOW TREEMAP ----------------
+
+st.plotly_chart(fig, use_container_width=True)
+
+# ---------------- STOCK NEWS ----------------
+
+st.subheader("Stock Specific News")
 
 selected_stock = st.selectbox(
     "Select Stock",
@@ -115,4 +163,10 @@ st.dataframe(
             "compound_sentiment",
         ]
     ]
+)
+
+# ---------------- LAST UPDATE ----------------
+
+st.info(
+    f"Last Refreshed: {pd.Timestamp.now().strftime('%d/%m/%Y %H:%M:%S')}"
 )
