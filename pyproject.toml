@@ -1,15 +1,15 @@
 # ---- Project Info and Dependencies ----
 
 [project.urls]
-Repository = "https://github.com/shubxam/Nifty-500-Live-Sentiment-Analysis"
+Repository = "https://github.com/pags666/Nifty-500-Live-Sentiment-Analysis"
 # Homepage = "https://..."
 # Documentation = "https://..."
 
 [project]
-name = "Nifty-500-Live-Sentiment-Analysis"
+name = "Nifty-500-Live-Sentiment-Analysis-dashboard"
 description = "real time sentiment analysis of nifty indices"
 authors = [
-    { name="Shubham Soni", email="shubxam@gmail.com" },
+    { name="Jeya Bharathi", email="pags40502@gmail.com" },
 ]
 readme = "README.md"
 license = "MIT"
