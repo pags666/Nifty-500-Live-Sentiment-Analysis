@@ -160,3 +160,6 @@ skips = ['*_test.py', 'test_*.py']
 
 [tool.ty.src]
 exclude = ["*.ipynb"]
+
+[tool.ty]
+exclude = ["src/notebooks"]
