@@ -4,7 +4,7 @@ import re
 from bs4 import BeautifulSoup, Tag
 from loguru import logger
 
-from utils import get_webpage_content, parse_date
+from src.utils import get_webpage_content, parse_date
 
 
 class NewsSource(ABC):
@@ -71,7 +71,7 @@ class GoogleFinanceSource(NewsSource):
                         )
                         continue
 
-                    date_posted: str | None = parse_date(relative_date_str)
+                    date_posted: str = parse_date(relative_date_str)
 
                     self.articles.append(
                         {
