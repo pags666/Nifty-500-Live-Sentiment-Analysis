@@ -27,13 +27,12 @@ def main():
 
     # set top_k=1 to get the most likely label or top_k=None to get all labels
     # device=-1 means CPU
+# ty: ignore[no-matching-overload]
     nlp_1 = pipeline(
-        'sentiment-analysis',
+        task='text-classification',
         model=finbert_1,
         tokenizer=tokenizer_1,
         device=-1,
-        top_k=1,
-        framework='pt',
     )
 
     # nlp_1_res = nlp_1(headlines, batch_size=512) # Remove or comment out the original single run
