@@ -13,7 +13,6 @@ from tqdm import tqdm
 
 from config import BATCH_SIZE, DB_UTILS, HEADER, SENTIMENT_MODEL_NAME
 from database import DatabaseManager
-from datetime import datetime, timedelta
 
 def get_webpage_content(
     url: str,
@@ -231,11 +230,13 @@ def analyse_sentiment(headlines: list[str]) -> pd.DataFrame:
             pretrained_model_name_or_path=SENTIMENT_MODEL_NAME,
             num_labels=3,
             use_safetensors=True,  # Use safe tensors
+            revision="main",
         )
     )
 
     tokenizer_1 = BertTokenizer.from_pretrained(
-        pretrained_model_name_or_path=SENTIMENT_MODEL_NAME
+        pretrained_model_name_or_path=SENTIMENT_MODEL_NAME,
+        revision="main",
     )
 
     # set top_k=1 to get the most likely label or top_k=None to get all labels
