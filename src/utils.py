@@ -230,13 +230,13 @@ def analyse_sentiment(headlines: list[str]) -> pd.DataFrame:
             pretrained_model_name_or_path=SENTIMENT_MODEL_NAME,
             num_labels=3,
             use_safetensors=True,  # Use safe tensors
-            revision="main",
+            revision="69507fb",
         )
     )
 
     tokenizer_1 = BertTokenizer.from_pretrained(
         pretrained_model_name_or_path=SENTIMENT_MODEL_NAME,
-        revision="main",
+        revision="69507fb",
     )
 
     # set top_k=1 to get the most likely label or top_k=None to get all labels
