@@ -66,7 +66,7 @@ fig.update_layout(margin=dict(t=30, l=10, r=10, b=10), font_size=20)
 
 # Get current date, time and timezone to print to the html page
 now = Instant.now().to_tz('Asia/Kolkata')
-datetime_now = now.py_datetime().strftime('%d/%m/%Y %H:%M:%S')
+datetime_now = now.to_stdlib().strftime('%d/%m/%Y %H:%M:%S')
 
 # Generate HTML File with Updated Time and Treemap
 print('Writing HTML')
