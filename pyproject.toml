@@ -18,5 +18,6 @@ dev = [
     "pandas-stubs>=2.2.3.250308",
     "watchdog>=6.0.0",
 ]
+
 [tool.poetry]
 package-mode = false
