@@ -3,7 +3,7 @@ from typing import final, override  # type: ignore
 import re
 from bs4 import BeautifulSoup, Tag
 from loguru import logger
-
+from datetime import datetime
 from src.utils import get_webpage_content, parse_date
 
 
@@ -244,7 +244,6 @@ class YahooFinanceSource(NewsSource):
 #         except Exception as e:
 #             logger.error(f'Error fetching from Finology for {ticker}: {str(e)}')
 #         return self.articles
-
 @final
 class FinologySource(NewsSource):
     def __init__(self):
@@ -287,9 +286,10 @@ class FinologySource(NewsSource):
                     if not link_tag:
                         continue
 
+                    href = str(link_tag.get('href', ''))
+
                     article_link: str = (
-                        'https://ticker.finology.in'
-                        + link_tag.get('href', '')
+                        'https://ticker.finology.in' + href
                     )
 
                     img_tag: Tag | None = article.find('img')
@@ -297,7 +297,9 @@ class FinologySource(NewsSource):
                     headline: str = ''
 
                     if img_tag:
-                        headline = img_tag.get('alt', '').strip()
+                        headline = str(
+                            img_tag.get('alt', '')
+                        ).strip()
 
                     if not headline:
                         continue
@@ -324,6 +326,8 @@ class FinologySource(NewsSource):
             logger.error(f'Error fetching from Finology for {ticker}: {str(e)}')
 
         return self.articles
+
+
 class TickerNewsObject:
     def __init__(self, ticker: str) -> None:
         self.ticker: str = ticker
