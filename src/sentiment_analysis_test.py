@@ -19,7 +19,10 @@ def main():
         use_safetensors=True,  # Use safe tensors
     )
 
-    tokenizer_1 = BertTokenizer.from_pretrained('yiyanghkust/finbert-tone')
+    tokenizer_1 = BertTokenizer.from_pretrained(
+        'yiyanghkust/finbert-tone',
+        revision="main"
+    )
 
     # set top_k=1 to get the most likely label or top_k=None to get all labels
     # device=-1 means CPU
