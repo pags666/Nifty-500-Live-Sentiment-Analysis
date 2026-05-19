@@ -4,7 +4,7 @@ import pandas as pd
 import plotly.express as px
 from whenever import Instant
 
-from database import DatabaseManager
+from src.database import DatabaseManager
 
 # Initialize database manager
 db_manager = DatabaseManager()
