@@ -23,8 +23,8 @@ class GoogleFinanceSource(NewsSource):
         self.articles: list[dict[str, str]] = []
         self.article_selector:str = 'div.S4GvHe'
         self.headline_selector: str= 'div.TQWIED'
-        #self.date_selector: str = 'div.Adak'
-        #self.source_selector: str = 'div.sfyJob'
+        self.date_selector: str = 'div.Adak'
+        self.source_selector: str = 'div.sfyJob'
         self.link_selector: str = 'a'
 
     @override
