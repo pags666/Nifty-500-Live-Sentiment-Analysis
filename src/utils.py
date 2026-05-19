@@ -229,7 +229,7 @@ def analyse_sentiment(headlines: list[str]) -> pd.DataFrame:
         BertForSequenceClassification.from_pretrained(
             pretrained_model_name_or_path=SENTIMENT_MODEL_NAME,
             num_labels=3,
-            use_safetensors=True,  # Use safe tensors
+            use_safetensors=False,  # Use safe tensors
             revision="69507fb",
         )
     )
