@@ -247,6 +247,7 @@ def analyse_sentiment(headlines: list[str]) -> pd.DataFrame:
         model=finbert_1,
         tokenizer=tokenizer_1,
         device=-1,
+        top_k=None,
     )
 
     try:
