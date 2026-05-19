@@ -14,7 +14,7 @@ import src.utils as utils
 from src.database import DatabaseManager
 from src.news_fetcher import TickerNewsObject
 from datetime import datetime, timedelta
-from export_to_sheets import push_to_sheet
+from src.export_to_sheets import push_to_sheet
 
 from src.utils import get_relative_date
 import pytz
