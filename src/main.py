@@ -10,15 +10,13 @@ import pandas as pd
 from loguru import logger
 from tqdm import tqdm
 
-import utils as utils
-from database import DatabaseManager
-from news_fetcher import TickerNewsObject
+import src.utils as utils
+from src.database import DatabaseManager
+from src.news_fetcher import TickerNewsObject
 from datetime import datetime, timedelta
-from database import DatabaseManager
 from export_to_sheets import push_to_sheet
 
-from utils import get_relative_date
-from datetime import datetime, timedelta
+from src.utils import get_relative_date
 import pytz
 
 ist = pytz.timezone("Asia/Kolkata")
