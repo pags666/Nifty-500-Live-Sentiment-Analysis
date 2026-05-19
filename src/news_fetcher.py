@@ -189,9 +189,10 @@ class FinologySource(NewsSource):
     def __init__(self):
         self.base_url = 'https://ticker.finology.in/company'
         self.articles: list[dict[str, str]] = []
-        self.article_selector: str = 'div#newsarticles a#btnDetails.newslink'
-        self.headline_selector: str = 'span'
-        self.date_selector: str = 'small'
+        self.article_selector: str = "div.card.cardscreen"
+        self.headline_selector: str = "div.blog-cardscreen h5"
+        self.link_selector: str = "a.bundlelink"
+        self.date_selector: str = "span.date"
 
     @override
     def get_articles(self, ticker: str) -> list[dict[str, str]]:
