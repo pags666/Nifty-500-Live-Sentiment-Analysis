@@ -17,11 +17,12 @@ def main():
         'yiyanghkust/finbert-tone',
         num_labels=3,
         use_safetensors=True,  # Use safe tensors
+        revision="69507fb",
     )
 
     tokenizer_1 = BertTokenizer.from_pretrained(
         'yiyanghkust/finbert-tone',
-        revision="main"
+        revision="69507fb",
     )
 
     # set top_k=1 to get the most likely label or top_k=None to get all labels
