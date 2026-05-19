@@ -250,7 +250,7 @@ def analyse_sentiment(headlines: list[str]) -> pd.DataFrame:
     )
 
     try:
-        results: list[list[dict[str, str | float]]] = nlp_1(
+        results = nlp_1(
             headlines, batch_size=BATCH_SIZE
         )
     except Exception as e:
